@@ -1,0 +1,2362 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trắc Nghiệm Dẫn Luận Ngôn Ngữ Học</title>
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success: #16a34a;
+        --danger: #dc2626;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #1e293b;
+        --text-light: #64748b;
+        --border: #e2e8f0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      }
+
+      h1 {
+        color: var(--primary);
+        margin-bottom: 10px;
+        font-size: 24px;
+      }
+
+      .menu,
+      .quiz-box,
+      .result-box,
+      .history-box {
+        background: var(--card-bg);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        margin-bottom: 20px;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      .grid-menu {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      @media (max-width: 600px) {
+        .grid-menu {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      button {
+        padding: 14px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-menu {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        color: var(--text);
+      }
+
+      .btn-menu:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: #eff6ff;
+      }
+
+      .btn-main {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-main:hover {
+        background: var(--primary-hover);
+      }
+
+      .btn-secondary {
+        background: var(--text-light);
+        color: white;
+      }
+
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      .btn-danger:hover {
+        background: #b91c1c;
+      }
+
+      .quiz-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid var(--border);
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        font-weight: 600;
+        color: var(--text-light);
+      }
+
+      .question-text {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .option {
+        padding: 14px 20px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+        text-align: left;
+        background: transparent;
+        width: 100%;
+      }
+
+      .option:hover:not([disabled]) {
+        border-color: var(--primary);
+        background-color: #eff6ff;
+      }
+
+      .option.correct {
+        background-color: #dcfce7 !important;
+        border-color: var(--success) !important;
+        color: #14532d !important;
+      }
+
+      .option.wrong {
+        background-color: #fee2e2 !important;
+        border-color: var(--danger) !important;
+        color: #7f1d1d !important;
+      }
+
+      .quiz-footer {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .result-box {
+        text-align: center;
+      }
+
+      .score-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 8px solid var(--primary);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 20px auto;
+        font-size: 32px;
+        font-weight: bold;
+        color: var(--primary);
+      }
+
+      .score-circle span {
+        font-size: 14px;
+        color: var(--text-light);
+        font-weight: normal;
+      }
+
+      .remark {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 25px;
+      }
+
+      /* THÀNH PHẦN LỊCH SỬ MỚI */
+      .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .history-table-wrapper {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        background-color: #f1f5f9;
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      tr:hover {
+        background-color: #f8fafc;
+      }
+
+      .badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 12px;
+      }
+      .badge-easy {
+        background: #dcfce7;
+        color: #15803d;
+      }
+      .badge-medium {
+        background: #fef9c3;
+        color: #a16207;
+      }
+      .badge-hard {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+      .badge-all {
+        background: #e0f2fe;
+        color: #0369a1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Ứng Dụng Ôn Thi Dẫn Luận Ngôn Ngữ Học</h1>
+        <p>Hệ thống câu hỏi trắc nghiệm chia theo cấp độ</p>
+      </header>
+
+      <div id="menu-container">
+        <div id="menu" class="menu">
+          <h2 style="text-align: center; margin-bottom: 10px">
+            Chọn Chế Độ Luyện Tập
+          </h2>
+          <p style="text-align: center; color: var(--text-light)">
+            Câu hỏi và đáp án sẽ được xáo trộn ngẫu nhiên mỗi lần chơi.
+          </p>
+          <div class="grid-menu">
+            <button class="btn-menu" onclick="startQuiz('easy')">
+              🟢 Mức độ Dễ (50 câu)
+            </button>
+            <button class="btn-menu" onclick="startQuiz('medium')">
+              🟡 Mức độ Trung bình (50 câu)
+            </button>
+            <button class="btn-menu" onclick="startQuiz('hard')">
+              🔴 Mức độ Khó (48 câu)
+            </button>
+            <button class="btn-menu" onclick="startQuiz('all')">
+              🔥 Tất cả các câu (148 câu)
+            </button>
+          </div>
+        </div>
+
+        <div id="history-box" class="history-box">
+          <div class="history-header">
+            <h2>📊 Lịch Sử Làm Bài</h2>
+            <button
+              class="btn-danger"
+              id="clear-history-btn"
+              onclick="clearHistory()"
+            >
+              Xóa lịch sử
+            </button>
+          </div>
+          <div class="history-table-wrapper">
+            <table id="history-table">
+              <thead>
+                <tr>
+                  <th>Thời gian</th>
+                  <th>Chế độ</th>
+                  <th>Số câu đúng</th>
+                  <th>Tỷ lệ</th>
+                  <th>Kết quả</th>
+                </tr>
+              </thead>
+              <tbody id="history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="quiz-box" class="quiz-box hidden">
+        <div class="quiz-header">
+          <span id="quiz-mode-title">Chế độ: </span>
+          <span id="question-progress">Câu hỏi: 1/50</span>
+        </div>
+        <div id="question-container">
+          <div class="question-text" id="question-text">
+            Nội dung câu hỏi ở đây?
+          </div>
+          <div class="options-list" id="options-list"></div>
+        </div>
+        <div class="quiz-footer">
+          <button class="btn-secondary" onclick="confirmExit()">Thoát</button>
+          <button
+            class="btn-main hidden"
+            id="next-btn"
+            onclick="nextQuestion()"
+          >
+            Câu Tiếp Theo ➔
+          </button>
+        </div>
+      </div>
+
+      <div id="result-box" class="result-box hidden">
+        <h2>Kết Quả Làm Bài</h2>
+        <div class="score-circle" id="score-circle">
+          80%
+          <span id="score-text">40/50 câu</span>
+        </div>
+        <div class="remark" id="remark">Khá lắm! Cố gắng phát huy nhé.</div>
+        <button class="btn-main" onclick="backToMenu()">
+          Quay về màn hình chính
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // TOÀN BỘ DỮ LIỆU CÂU HỎI (148 CÂU)
+      const rawQuestions = [
+        // DỄ (1 - 50)
+        {
+          id: 1,
+          type: "easy",
+          q: "Ngôn ngữ là hiện tượng gì?",
+          arr: [
+            "Hiện tượng tự nhiên.",
+            "Hiện tượng cá nhân.",
+            "Hiện tượng xã hội.",
+            "Hiện tượng sinh học.",
+          ],
+          ans: "Hiện tượng xã hội.",
+        },
+        {
+          id: 2,
+          type: "easy",
+          q: "Chức năng quan trọng nhất của ngôn ngữ là gì?",
+          arr: [
+            "Chức năng giải trí.",
+            "Chức năng giao tiếp.",
+            "Chức năng bộc lộ cảm xúc.",
+            "Chức năng thẩm mỹ.",
+          ],
+          ans: "Chức năng giao tiếp.",
+        },
+        {
+          id: 3,
+          type: "easy",
+          q: "Theo quan điểm của chủ nghĩa Mác, ngôn ngữ phát sinh do đâu?",
+          arr: [
+            "Do ý muốn của Thượng đế.",
+            "Do nhu cầu giao tiếp của con người trong lao động.",
+            "Do bản năng sinh vật.",
+            "Do sự bắt chước tiếng kêu của động vật.",
+          ],
+          ans: "Do nhu cầu giao tiếp của con người trong lao động.",
+        },
+        {
+          id: 4,
+          type: "easy",
+          q: "Đơn vị nhỏ nhất của ngôn ngữ có nghĩa là gì?",
+          arr: ["Âm vị.", "Hình vị.", "Từ.", "Câu."],
+          ans: "Hình vị.",
+        },
+        {
+          id: 5,
+          type: "easy",
+          q: "Đơn vị ngôn ngữ nhỏ nhất dùng để thông báo là gì?",
+          arr: ["Từ.", "Ngữ.", "Câu.", "Âm tiết."],
+          ans: "Câu.",
+        },
+        {
+          id: 6,
+          type: "easy",
+          q: 'Ai là chủ biên của cuốn giáo trình "Dẫn luận Ngôn ngữ học" (Tái bản lần thứ 14)?',
+          arr: [
+            "Đỗ Hữu Châu.",
+            "Nguyễn Thiện Giáp.",
+            "Nguyễn Lai.",
+            "Bùi Khánh Thế.",
+          ],
+          ans: "Nguyễn Thiện Giáp.",
+        },
+        {
+          id: 7,
+          type: "easy",
+          q: "Ngôn ngữ có tính di truyền không?",
+          arr: [
+            "Có, di truyền qua màu da.",
+            "Có, di truyền từ bố mẹ sang con cái.",
+            "Không, ngôn ngữ không có tính di truyền.",
+            "Có, tùy thuộc vào chủng tộc.",
+          ],
+          ans: "Không, ngôn ngữ không có tính di truyền.",
+        },
+        {
+          id: 8,
+          type: "easy",
+          q: "Hệ thống tín hiệu thứ hai là tên gọi dành cho:",
+          arr: [
+            "Tiếng kêu của động vật.",
+            "Các phản xạ không điều kiện.",
+            "Ngôn ngữ của con người.",
+            "Cảm giác về nhiệt độ và âm thanh.",
+          ],
+          ans: "Ngôn ngữ của con người.",
+        },
+        {
+          id: 9,
+          type: "easy",
+          q: "Ngôn ngữ và tư duy có mối quan hệ như thế nào?",
+          arr: [
+            "Ngôn ngữ và tư duy là một.",
+            "Ngôn ngữ và tư duy tách rời nhau.",
+            "Ngôn ngữ là hiện thực trực tiếp của tư duy.",
+            "Tư duy có trước, ngôn ngữ có sau rất lâu.",
+          ],
+          ans: "Ngôn ngữ là hiện thực trực tiếp của tư duy.",
+        },
+        {
+          id: 10,
+          type: "easy",
+          q: "Yếu tố nào quyết định sự nảy sinh ngôn ngữ theo Ăng-ghen?",
+          arr: ["Khí hậu.", "Lao động.", "Tôn giáo.", "Sự bắt chước."],
+          ans: "Lao động.",
+        },
+        {
+          id: 11,
+          type: "easy",
+          q: "Ngôn ngữ có thuộc kiến trúc thượng tầng không?",
+          arr: [
+            "Có.",
+            "Không.",
+            "Chỉ một phần.",
+            "Tùy theo giai đoạn lịch sử.",
+          ],
+          ans: "Không.",
+        },
+        {
+          id: 12,
+          type: "easy",
+          q: "Hình thức biểu hiện của từ là gì?",
+          arr: ["Khái niệm.", "Âm thanh.", "Đối tượng thực tế.", "Tình cảm."],
+          ans: "Âm thanh.",
+        },
+        {
+          id: 13,
+          type: "easy",
+          q: "Đơn vị nhỏ nhất của ngữ âm không có nghĩa là gì?",
+          arr: ["Hình vị.", "Từ.", "Âm vị.", "Câu."],
+          ans: "Âm vị.",
+        },
+        {
+          id: 14,
+          type: "easy",
+          q: "Thuộc tính nào sau đây không phải của ngôn ngữ?",
+          arr: [
+            "Tính hệ thống.",
+            "Tính xã hội.",
+            "Tính di truyền.",
+            "Tính tín hiệu.",
+          ],
+          ans: "Tính di truyền.",
+        },
+        {
+          id: 15,
+          type: "easy",
+          q: "Ngôn ngữ văn hóa dựa trên cơ sở nào?",
+          arr: [
+            "Tiếng lóng.",
+            "Tiếng nước ngoài.",
+            "Ngôn ngữ nói của toàn dân tộc.",
+            "Biệt ngữ giai cấp.",
+          ],
+          ans: "Ngôn ngữ nói của toàn dân tộc.",
+        },
+        {
+          id: 16,
+          type: "easy",
+          q: "Một từ có thể có bao nhiêu ý nghĩa?",
+          arr: [
+            "Chỉ một nghĩa duy nhất.",
+            "Có thể có một hoặc nhiều nghĩa.",
+            "Luôn luôn có hai nghĩa.",
+            "Không có nghĩa nào.",
+          ],
+          ans: "Có thể có một hoặc nhiều nghĩa.",
+        },
+        {
+          id: 17,
+          type: "easy",
+          q: "Quan hệ giữa cái biểu hiện và cái được biểu hiện của tín hiệu ngôn ngữ có đặc điểm gì?",
+          arr: [
+            "Tính bắt buộc.",
+            "Tính tự nhiên.",
+            "Tính võ đoán.",
+            "Tính logic tuyệt đối.",
+          ],
+          ans: "Tính võ đoán.",
+        },
+        {
+          id: 18,
+          type: "easy",
+          q: "Chức năng nào sau đây là chức năng của ngôn ngữ?",
+          arr: [
+            "Chức năng sản xuất của cải.",
+            "Chức năng là phương tiện của tư duy.",
+            "Chức năng di truyền chủng tộc.",
+            "Chức năng tiêu hóa thức ăn.",
+          ],
+          ans: "Chức năng là phương tiện của tư duy.",
+        },
+        {
+          id: 19,
+          type: "easy",
+          q: "Từ vựng của ngôn ngữ bao gồm:",
+          arr: [
+            "Chỉ các từ đơn.",
+            "Chỉ các thành ngữ.",
+            "Các từ và các ngữ sẵn có.",
+            "Chỉ các từ Hán Việt.",
+          ],
+          ans: "Các từ và các ngữ sẵn có.",
+        },
+        {
+          id: 20,
+          type: "easy",
+          q: "Ngôn ngữ dân tộc hình thành dựa trên:",
+          arr: [
+            "Sự áp đặt của một cá nhân.",
+            "Sự tập trung các tiếng địa phương.",
+            "Sự biến mật của lao động.",
+            "Sự bắt chước tiếng loài vật.",
+          ],
+          ans: "Sự tập trung các tiếng địa phương.",
+        },
+        {
+          id: 21,
+          type: "easy",
+          q: "Hiện tượng từ đồng âm là gì?",
+          arr: [
+            "Những từ có nghĩa giống nhau.",
+            "Những từ có âm giống nhau nhưng nghĩa khác nhau.",
+            "Những từ có âm và nghĩa đều giống nhau.",
+            "Những từ có nghĩa đối lập nhau.",
+          ],
+          ans: "Những từ có âm giống nhau nhưng nghĩa khác nhau.",
+        },
+        {
+          id: 22,
+          type: "easy",
+          q: "Từ trái nghĩa là những từ:",
+          arr: [
+            "Có âm giống nhau.",
+            "Có nghĩa đối lập nhau.",
+            "Có nghĩa tương đồng.",
+            "Luôn là từ mượn.",
+          ],
+          ans: "Có nghĩa đối lập nhau.",
+        },
+        {
+          id: 23,
+          type: "easy",
+          q: "Ngôn ngữ là phương tiện giao tiếp:",
+          arr: [
+            "Chỉ dành cho giới trí thức.",
+            "Chỉ dành cho một giai cấp.",
+            "Trọng yếu nhất của con người.",
+            "Kém hiệu quả hơn cử chỉ.",
+          ],
+          ans: "Trọng yếu nhất của con người.",
+        },
+        {
+          id: 24,
+          type: "easy",
+          q: "Bộ máy phát âm của con người gồm bao nhiêu khoang cộng hưởng chính?",
+          arr: ["1.", "2.", "3.", "4."],
+          ans: "3.",
+        },
+        {
+          id: 25,
+          type: "easy",
+          q: "Tiếng kêu của động vật là:",
+          arr: [
+            "Ngôn ngữ thực sự.",
+            "Hệ thống tín hiệu thứ nhất.",
+            "Hệ thống tín hiệu thứ hai.",
+            "Tư duy trừu tượng.",
+          ],
+          ans: "Hệ thống tín hiệu thứ nhất.",
+        },
+        {
+          id: 26,
+          type: "easy",
+          q: 'Ai là người chứng minh sự tồn tại của "lời nói bên trong"?',
+          arr: ["Nguyễn Thiện Giáp.", "Bôrôpxki.", "Saussure.", "Marx."],
+          ans: "Bôrôpxki.",
+        },
+        {
+          id: 27,
+          type: "easy",
+          q: 'Từ "ăn" trong "ăn cơm" và "ăn cưới" thể hiện hiện tượng gì?',
+          arr: ["Đồng âm.", "Đa nghĩa.", "Trái nghĩa.", "Đồng nghĩa."],
+          ans: "Đa nghĩa.",
+        },
+        {
+          id: 28,
+          type: "easy",
+          q: "Thuyết tượng thanh cho rằng ngôn ngữ bắt nguồn từ đâu?",
+          arr: [
+            "Từ lao động.",
+            "Từ sự bắt chước âm thanh tự nhiên.",
+            "Từ khế ước xã hội.",
+            "Từ tình cảm bị xúc động.",
+          ],
+          ans: "Từ sự bắt chước âm thanh tự nhiên.",
+        },
+        {
+          id: 29,
+          type: "easy",
+          q: "Ngôn ngữ có tính giai cấp không?",
+          arr: [
+            "Có.",
+            "Không.",
+            "Có, trong xã hội tư bản.",
+            "Có, vì nó thuộc kiến trúc thượng tầng.",
+          ],
+          ans: "Không.",
+        },
+        {
+          id: 30,
+          type: "easy",
+          q: "Đơn vị nào sau đây có chức năng định danh?",
+          arr: ["Âm vị.", "Từ.", "Câu.", "Hình vị phụ tố."],
+          ans: "Từ.",
+        },
+        {
+          id: 31,
+          type: "easy",
+          q: "Tín hiệu ngôn ngữ có tính chất gì giúp phân biệt nó với các tín hiệu khác?",
+          arr: [
+            "Tính đơn trị.",
+            "Tính đa trị.",
+            "Tính hình tượng tuyệt đối.",
+            "Tính tạm thời.",
+          ],
+          ans: "Tính đa trị.",
+        },
+        {
+          id: 32,
+          type: "easy",
+          q: 'Từ "mẹ" và "u" là hai từ:',
+          arr: ["Trái nghĩa.", "Đồng âm.", "Đồng nghĩa.", "Đa nghĩa."],
+          ans: "Đồng nghĩa.",
+        },
+        {
+          id: 33,
+          type: "easy",
+          q: "Sự phát triển của ngôn ngữ diễn ra:",
+          arr: [
+            "Đột biến, nhảy vọt.",
+            "Từ từ, liên tục.",
+            "Theo ý muốn của nhà nước.",
+            "Theo chu kỳ 100 năm một lần.",
+          ],
+          ans: "Từ từ, liên tục.",
+        },
+        {
+          id: 34,
+          type: "easy",
+          q: "Bộ phận nào của ngôn ngữ biến đổi nhanh nhất?",
+          arr: ["Ngữ pháp.", "Ngữ âm.", "Từ vựng.", "Hình thái học."],
+          ans: "Từ vựng.",
+        },
+        {
+          id: 35,
+          type: "easy",
+          q: "Tiền thân của ngôn ngữ loài người là:",
+          arr: [
+            "Ngôn ngữ cử chỉ.",
+            "Hệ thống tín hiệu thứ nhất.",
+            "Tiếng kêu trong lao động.",
+            "Cả B và C.",
+          ],
+          ans: "Cả B và C.",
+        },
+        {
+          id: 36,
+          type: "easy",
+          q: "Ngôn ngữ bộ lạc là hình thức phát triển của ngôn ngữ trong tổ chức xã hội nào?",
+          arr: [
+            "Dân tộc.",
+            "Bộ tộc.",
+            "Thị tộc và bộ lạc.",
+            "Quốc gia hiện đại.",
+          ],
+          ans: "Thị tộc và bộ lạc.",
+        },
+        {
+          id: 37,
+          type: "easy",
+          q: "Thuật ngữ khoa học có đặc điểm gì nổi bật?",
+          arr: [
+            "Tính mơ hồ.",
+            "Tính đa nghĩa cao.",
+            "Tính xác định về nghĩa và tính hệ thống.",
+            "Tính địa phương.",
+          ],
+          ans: "Tính xác định về nghĩa và tính hệ thống.",
+        },
+        {
+          id: 38,
+          type: "easy",
+          q: "Từ lóng (tiếng lóng) là lớp từ vựng:",
+          arr: [
+            "Toàn dân đều dùng.",
+            "Hạn chế về mặt xã hội.",
+            "Dụng trong văn bản hành chính.",
+            "Có tính chất vĩnh cửu.",
+          ],
+          ans: "Hạn chế về mặt xã hội.",
+        },
+        {
+          id: 39,
+          type: "easy",
+          q: 'Từ "chết" và "khuất núi" là ví dụ của:',
+          arr: [
+            "Từ trái nghĩa.",
+            "Uyển ngữ (nói giảm nói tránh).",
+            "Từ lóng.",
+            "Thuật ngữ.",
+          ],
+          ans: "Uyển ngữ (nói giảm nói tránh).",
+        },
+        {
+          id: 40,
+          type: "easy",
+          q: '"Lời nói bên trong" xuất hiện khi nào?',
+          arr: [
+            "Khi nói chuyện với người khác.",
+            "Khi im lặng suy nghĩ.",
+            "Khi ngủ mơ.",
+            "Khi viết văn bản.",
+          ],
+          ans: "Khi im lặng suy nghĩ.",
+        },
+        {
+          id: 41,
+          type: "easy",
+          q: "Hệ thống ngữ pháp của ngôn ngữ biến đổi như thế nào?",
+          arr: [
+            "Rất nhanh.",
+            "Chậm nhất trong các bộ phận.",
+            "Không bao giờ biến đổi.",
+            "Biến đổi theo từng cá nhân.",
+          ],
+          ans: "Chậm nhất trong các bộ phận.",
+        },
+        {
+          id: 42,
+          type: "easy",
+          q: "Tín hiệu là gì?",
+          arr: [
+            "Một vật thể kích thích giác quan để chỉ ra một cái gì đó.",
+            "Một ý nghĩ trừu tượng.",
+            "Chỉ là âm thanh.",
+            "Chỉ là chữ viết.",
+          ],
+          ans: "Một vật thể kích thích giác quan để chỉ ra một cái gì đó.",
+        },
+        {
+          id: 43,
+          type: "easy",
+          q: "Từ mượn gốc Hán trong tiếng Việt chiếm tỉ lệ:",
+          arr: [
+            "Rất nhỏ.",
+            "Rất lớn.",
+            "Không có.",
+            "Chỉ có trong thuật ngữ y học.",
+          ],
+          ans: "Rất lớn.",
+        },
+        {
+          id: 44,
+          type: "easy",
+          q: "Chức năng giao tiếp của ngôn ngữ nhằm:",
+          arr: [
+            "Giúp con người hiểu biết lẫn nhau.",
+            "Tổ chức công tác chung.",
+            "Trao đổi tư tưởng, tình cảm.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 45,
+          type: "easy",
+          q: "Từ vựng tích cực là:",
+          arr: [
+            "Những từ mới xuất hiện.",
+            "Những từ quen thuộc, dùng thường xuyên.",
+            "Những từ đã lỗi thời.",
+            "Những từ chỉ nhà văn mới dùng.",
+          ],
+          ans: "Những từ quen thuộc, dùng thường xuyên.",
+        },
+        {
+          id: 46,
+          type: "easy",
+          q: '"Bản chất xã hội đặc biệt" của ngôn ngữ nghĩa là nó không thuộc về:',
+          arr: [
+            "Cơ sở hạ tầng.",
+            "Kiến trúc thượng tầng.",
+            "Công cụ sản xuất.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 47,
+          type: "easy",
+          q: 'Một từ "vị" (trong từ vị) là đơn vị:',
+          arr: [
+            "Cụ thể trong lời nói.",
+            "Trừu tượng trong hệ thống.",
+            "Chỉ có trong chữ viết.",
+            "Không có nghĩa.",
+          ],
+          ans: "Trừu tượng trong hệ thống.",
+        },
+        {
+          id: 48,
+          type: "easy",
+          q: "Phương ngữ (tiếng địa phương) khác nhau chủ yếu ở mặt nào?",
+          arr: [
+            "Ngữ pháp.",
+            "Ngữ âm.",
+            "Cấu tạo từ.",
+            "Không có sự khác biệt.",
+          ],
+          ans: "Ngữ âm.",
+        },
+        {
+          id: 49,
+          type: "easy",
+          q: "Ngôn ngữ và xã hội có mối quan hệ:",
+          arr: [
+            "Tách rời.",
+            "Ngôn ngữ quyết định xã hội.",
+            "Gắn liền, ngôn ngữ phát triển cùng xã hội.",
+            "Xã hội biến đổi mà ngôn ngữ đứng yên.",
+          ],
+          ans: "Gắn liền, ngôn ngữ phát triển cùng xã hội.",
+        },
+        {
+          id: 50,
+          type: "easy",
+          q: "Theo thuyết khế ước xã hội, ngôn ngữ do đâu mà có?",
+          arr: [
+            "Do lao động.",
+            "Do sự thỏa thuận giữa con người.",
+            "Do bản năng.",
+            "Do bắt chước tiếng chim.",
+          ],
+          ans: "Do sự thỏa thuận giữa con người.",
+        },
+
+        // TRUNG BÌNH (51 - 100)
+        {
+          id: 51,
+          type: "medium",
+          q: "Tại sao ngôn ngữ không phải là hiện tượng tự nhiên?",
+          arr: [
+            "Vì nó không có tính di truyền.",
+            "Vì nó không tự nảy sinh, trưởng thành và diệt vong như cơ thể sống.",
+            "Vì nó không thể có được ngoài xã hội loài người.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 52,
+          type: "medium",
+          q: "Sự khác nhau giữa ngôn ngữ con người và tiếng kêu của động vật là gì?",
+          arr: [
+            "Tiếng kêu động vật là hệ thống tín hiệu thứ nhất, ngôn ngữ là hệ thống tín hiệu thứ hai.",
+            "Ngôn ngữ gắn liền với tư duy trừu tượng, tiếng kêu động vật là phản xạ sinh học.",
+            "Ngôn ngữ có tính xã hội, tiếng kêu động vật có tính bản năng.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 53,
+          type: "medium",
+          q: "Quan điểm của Sa-khơ-ma-tốp cho rằng ngôn ngữ là hiện tượng cá nhân bị phê phán vì:",
+          arr: [
+            "Nếu không có ngôn ngữ chung thống nhất thì con người không thể giao tiếp.",
+            "Mỗi cá nhân có thể nói một ngôn ngữ riêng mà không cần ai hiểu.",
+            "Ngôn ngữ cá nhân quan trọng hơn ngôn ngữ dân tộc.",
+            "Ngôn ngữ chỉ tồn tại trong sách vở.",
+          ],
+          ans: "Nếu không có ngôn ngữ chung thống nhất thì con người không thể giao tiếp.",
+        },
+        {
+          id: 54,
+          type: "medium",
+          q: "Tại sao ngôn ngữ không thuộc kiến trúc thượng tầng?",
+          arr: [
+            "Vì nó không phục vụ riêng cho một giai cấp nào.",
+            "Vì nó không sụp đổ khi cơ sở hạ tầng thay đổi.",
+            "Vì nó liên hệ trực tiếp với sản xuất.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 55,
+          type: "medium",
+          q: "Mối quan hệ giữa chức năng giao tiếp và chức năng tư duy là:",
+          arr: [
+            "Hai chức năng này tách rời nhau.",
+            "Chức năng tư duy chỉ là một phần nhỏ của chức năng giao tiếp.",
+            "Chúng thống nhất nhưng độc lập với nhau.",
+            "Không có chức năng tư duy, chỉ có chức năng giao tiếp.",
+          ],
+          ans: "Chúng thống nhất nhưng độc lập với nhau.",
+        },
+        {
+          id: 56,
+          type: "medium",
+          q: '"Tính võ đoán" của tín hiệu ngôn ngữ có nghĩa là:',
+          arr: [
+            "Mối quan hệ giữa âm thanh và khái niệm là ngẫu nhiên, theo quy ước.",
+            "Người nói muốn gọi sự vật là gì cũng được.",
+            "Âm thanh phải mô phỏng đúng đặc điểm sự vật.",
+            "Mọi ngôn ngữ trên thế giới đều dùng âm thanh giống nhau cho một sự vật.",
+          ],
+          ans: "Mối quan hệ giữa âm thanh và khái niệm là ngẫu nhiên, theo quy ước.",
+        },
+        {
+          id: 57,
+          type: "medium",
+          q: "Sự khác biệt về chất giữa ngôn ngữ và tư duy thể hiện ở chỗ:",
+          arr: [
+            "Ngôn ngữ là vật chất (âm thanh), tư duy là tinh thần.",
+            "Ngôn ngữ có tính dân tộc, tư duy có tính nhân loại.",
+            "Đơn vị của ngôn ngữ không đồng nhất với đơn vị của tư duy.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 58,
+          type: "medium",
+          q: "Tại sao lao động lại là điều kiện nảy sinh ngôn ngữ?",
+          arr: [
+            "Vì lao động tạo ra nhu cầu giao tiếp để hợp tác.",
+            "Vì lao động giúp hoàn thiện bộ máy phát âm.",
+            "Vì lao động thúc đẩy tư duy trừu tượng phát triển.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 59,
+          type: "medium",
+          q: "Thuyết ngôn ngữ cử chỉ của Marr bị bác bỏ vì:",
+          arr: [
+            "Không có xã hội loài người nào không có ngôn ngữ thành tiếng.",
+            "Cử chỉ dựa trên thị giác, âm thanh dựa trên thính giác, không có tính kế thừa lịch sử.",
+            "Cử chỉ quá nghèo nàn để biểu đạt tư duy trừu tượng.",
+            "Cả A và B.",
+          ],
+          ans: "Cả A và B.",
+        },
+        {
+          id: 60,
+          type: "medium",
+          q: "Bước quá độ từ ngôn ngữ bộ lạc sang ngôn ngữ dân tộc là:",
+          arr: [
+            "Ngôn ngữ quốc tế.",
+            "Ngôn ngữ khu vực.",
+            "Ngôn ngữ lóng.",
+            "Ngôn ngữ văn hóa.",
+          ],
+          ans: "Ngôn ngữ khu vực.",
+        },
+        {
+          id: 61,
+          type: "medium",
+          q: '"Tính đa trị" của tín hiệu ngôn ngữ biểu hiện qua:',
+          arr: [
+            "Hiện tượng đa nghĩa và đồng âm.",
+            "Hiện tượng đồng nghĩa.",
+            "Khả năng biểu hiện tình cảm.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 62,
+          type: "medium",
+          q: "Một hệ thống ngôn ngữ gồm các cấp độ nào?",
+          arr: [
+            "Âm vị, hình vị, từ, câu.",
+            "Chỉ có từ và câu.",
+            "Chỉ có âm thanh và chữ viết.",
+            "Ngữ pháp và từ vựng.",
+          ],
+          ans: "Âm vị, hình vị, từ, câu.",
+        },
+        {
+          id: 63,
+          type: "medium",
+          q: "Giá trị lịch đại của ngôn ngữ là:",
+          arr: [
+            "Ngôn ngữ chỉ có giá trị tại một thời điểm.",
+            "Ngôn ngữ là phương tiện giao tiếp giữa các thời đại khác nhau.",
+            "Ngôn ngữ biến đổi theo ý muốn của vua chúa.",
+            "Ngôn ngữ không bao giờ thay đổi.",
+          ],
+          ans: "Ngôn ngữ là phương tiện giao tiếp giữa các thời đại khác nhau.",
+        },
+        {
+          id: 64,
+          type: "medium",
+          q: 'Từ "bào" (dụng cụ mộc) và "bào" (hành động làm nhẵn gỗ) có quan hệ:',
+          arr: [
+            "Đồng âm hoàn toàn.",
+            "Đa nghĩa (do chuyển loại).",
+            "Trái nghĩa.",
+            "Không có quan hệ gì.",
+          ],
+          ans: "Đa nghĩa (do chuyển loại).",
+        },
+        {
+          id: 65,
+          type: "medium",
+          q: "Tại sao tiếng Việt có nhiều từ đồng âm hơn tiếng Anh hay tiếng Nga?",
+          arr: [
+            "Vì tiếng Việt là ngôn ngữ đơn lập, âm tiết trùng với từ và hình vị.",
+            "Vì người Việt thích dùng từ đồng âm.",
+            "Vì tiếng Việt có ít âm tiết.",
+            "Vì tiếng Việt không có ngữ pháp.",
+          ],
+          ans: "Vì tiếng Việt là ngôn ngữ đơn lập, âm tiết trùng với từ và hình vị.",
+        },
+        {
+          id: 66,
+          type: "medium",
+          q: '"Nghĩa sở chỉ" của từ là:',
+          arr: [
+            "Quan hệ của từ với khái niệm.",
+            "Quan hệ của từ với đối tượng thực tế mà nó biểu thị.",
+            "Quan hệ của từ với người nói.",
+            "Quan hệ của từ với các từ khác.",
+          ],
+          ans: "Quan hệ của từ với đối tượng thực tế mà nó biểu thị.",
+        },
+        {
+          id: 67,
+          type: "medium",
+          q: "Hiện tượng ẩn dụ dựa trên:",
+          arr: [
+            "Sự tương đồng (giống nhau) giữa các đối tượng.",
+            "Sự gần gũi về không gian hoặc thời gian.",
+            "Sự đối lập về tính chất.",
+            "Sự thỏa thuận ngẫu nhiên.",
+          ],
+          ans: "Sự tương đồng (giống nhau) giữa các đối tượng.",
+        },
+        {
+          id: 68,
+          type: "medium",
+          q: '"Tay áo", "cổ áo" là ví dụ của hiện tượng chuyển nghĩa nào?',
+          arr: [
+            "Ẩn dụ.",
+            "Hoán dụ (lấy bộ phận con người thay bộ phận quần áo).",
+            "Mở rộng nghĩa.",
+            "Thu hẹp nghĩa.",
+          ],
+          ans: "Hoán dụ (lấy bộ phận con người thay bộ phận quần áo).",
+        },
+        {
+          id: 69,
+          type: "medium",
+          q: "Điều kiện để hai từ được coi là đồng nghĩa là:",
+          arr: [
+            "Chúng phải có âm giống nhau.",
+            "Chúng phải gần nhau về nghĩa, biểu thị các sắc thái khác nhau của một khái niệm.",
+            "Chúng phải thuộc hai ngôn ngữ khác nhau.",
+            "Chúng phải có nguồn gốc từ tiếng Hán.",
+          ],
+          ans: "Chúng phải gần nhau về nghĩa, biểu thị các sắc thái khác nhau của một khái niệm.",
+        },
+        {
+          id: 70,
+          type: "medium",
+          q: 'Cặp từ "nông - sâu" là từ trái nghĩa vì:',
+          arr: [
+            "Chúng có âm khác nhau.",
+            "Chúng đối lập về nghĩa và cùng thuộc một phạm vi tương liên (bề sâu).",
+            "Chúng thường xuất hiện cùng nhau.",
+            "Chúng là từ thuần Việt.",
+          ],
+          ans: "Chúng đối lập về nghĩa và cùng thuộc một phạm vi tương liên (bề sâu).",
+        },
+        {
+          id: 71,
+          type: "medium",
+          q: "Tại sao thuật ngữ khoa học thường chỉ có một nghĩa trong một hệ thống?",
+          arr: [
+            "Để bảo đảm tính chính xác và tránh hiểu lầm trong khoa học.",
+            "Vì các nhà khoa học không biết dùng từ đa nghĩa.",
+            "Vì thuật ngữ không có tính dân tộc.",
+            "Vì thuật ngữ là từ mượn.",
+          ],
+          ans: "Để bảo đảm tính chính xác và tránh hiểu lầm trong khoa học.",
+        },
+        {
+          id: 72,
+          type: "medium",
+          q: 'Sự khác biệt giữa "từ ngữ cổ" và "từ ngữ lịch sử" là:',
+          arr: [
+            "Từ cổ vẫn còn đối tượng nhưng có tên mới; từ lịch sử mất đối tượng nên tên cũng mất theo.",
+            "Từ cổ là từ mượn; từ lịch sử là từ bản ngữ.",
+            "Từ cổ dùng trong thơ; từ lịch sử dùng trong văn xuôi.",
+            "Không có sự khác biệt.",
+          ],
+          ans: "Từ cổ vẫn còn đối tượng nhưng có tên mới; từ lịch sử mất đối tượng nên tên cũng mất theo.",
+        },
+        {
+          id: 73,
+          type: "medium",
+          q: 'Hiện tượng "sao phỏng cấu tạo từ" là:',
+          arr: [
+            "Mượn cả âm và nghĩa của từ nước ngoài.",
+            "Dịch từng thành tố của từ nước ngoài sang ngôn ngữ mình theo mẫu kết cấu của họ.",
+            "Chỉ mượn nghĩa bóng của từ nước ngoài.",
+            "Viết lại từ nước ngoài bằng chữ quốc ngữ.",
+          ],
+          ans: "Dịch từng thành tố của từ nước ngoài sang ngôn ngữ mình theo mẫu kết cấu của họ.",
+        },
+        {
+          id: 74,
+          type: "medium",
+          q: '"Hình thái bên trong của từ" là:',
+          arr: [
+            "Cấu tạo âm thanh của từ.",
+            "Dấu hiệu hoặc đặc tính được lấy làm căn cứ để gọi tên sự vật.",
+            "Ý nghĩa ngữ pháp của từ.",
+            "Cách viết của từ.",
+          ],
+          ans: "Dấu hiệu hoặc đặc tính được lấy làm căn cứ để gọi tên sự vật.",
+        },
+        {
+          id: 75,
+          type: "medium",
+          q: "Ngữ âm học nghiên cứu ngôn ngữ ở phương diện nào?",
+          arr: [
+            "Nghĩa của từ.",
+            "Mặt âm thanh của lời nói.",
+            "Cách sắp xếp từ trong câu.",
+            "Nguồn gốc các dân tộc.",
+          ],
+          ans: "Mặt âm thanh của lời nói.",
+        },
+        {
+          id: 76,
+          type: "medium",
+          q: "Cao độ của âm thanh do yếu tố nào quyết định?",
+          arr: [
+            "Biên độ dao động.",
+            "Tần số dao động của dây thanh.",
+            "Thời gian dao động.",
+            "Hình dáng khoang miệng.",
+          ],
+          ans: "Tần số dao động của dây thanh.",
+        },
+        {
+          id: 77,
+          type: "medium",
+          q: "Tại sao giọng phụ nữ thường cao hơn giọng nam giới?",
+          arr: [
+            "Do cấu tạo dây thanh khác nhau (tần số dao động nhanh hơn).",
+            "Do phụ nữ nói nhiều hơn.",
+            "Do phụ nữ có khoang miệng nhỏ hơn.",
+            "Do thói quen xã hội.",
+          ],
+          ans: "Do cấu tạo dây thanh khác nhau (tần số dao động nhanh hơn).",
+        },
+        {
+          id: 78,
+          type: "medium",
+          q: '"Âm sắc" của âm thanh lời nói phụ thuộc vào:',
+          arr: [
+            "Độ mạnh của luồng hơi.",
+            "Các hộp cộng hưởng (miệng, mũi, yết hầu).",
+            "Độ dài của âm.",
+            "Tần số cơ bản.",
+          ],
+          ans: "Các hộp cộng hưởng (miệng, mũi, yết hầu).",
+        },
+        {
+          id: 79,
+          type: "medium",
+          q: "Sự khác nhau cơ bản giữa nguyên âm và phụ âm về mặt cấu âm là:",
+          arr: [
+            "Nguyên âm luồng hơi ra tự do; phụ âm luồng hơi bị cản trở.",
+            "Nguyên âm vô thanh; phụ âm hữu thanh.",
+            "Nguyên âm luôn ngắn; phụ âm luôn dài.",
+            "Nguyên âm không có âm sắc.",
+          ],
+          ans: "Nguyên âm luồng hơi ra tự do; phụ âm luồng hơi bị cản trở.",
+        },
+        {
+          id: 80,
+          type: "medium",
+          q: "Chức năng của âm vị là:",
+          arr: [
+            "Biểu đạt ý nghĩa trực tiếp.",
+            "Nhận cảm và phân biệt ý nghĩa.",
+            "Gọi tên sự vật.",
+            "Tạo thành câu.",
+          ],
+          ans: "Nhận cảm và phân biệt ý nghĩa.",
+        },
+        {
+          id: 81,
+          type: "medium",
+          q: "Tại sao nói ngôn ngữ có tính độc lập tương đối?",
+          arr: [
+            "Vì nó phát triển theo quy luật nội tại, không phụ thuộc hoàn toàn vào ý chí cá nhân.",
+            "Vì nó không liên quan gì đến xã hội.",
+            "Vì nó có thể thay đổi trong một ngày.",
+            "Vì nó chỉ phụ thuộc vào cơ sở hạ tầng.",
+          ],
+          ans: "Vì nó phát triển theo quy luật nội tại, không phụ thuộc hoàn toàn vào ý chí cá nhân.",
+        },
+        {
+          id: 82,
+          type: "medium",
+          q: '"Trục tuyến tính" trong ngôn ngữ thể hiện ở việc:',
+          arr: [
+            "Các đơn vị xuất hiện lần lượt kế tiếp nhau trong thời gian.",
+            "Các đơn vị có thể thay thế nhau ở cùng một vị trí.",
+            "Ngôn ngữ chỉ có một nghĩa duy nhất.",
+            "Ngôn ngữ không có cấu trúc.",
+          ],
+          ans: "Các đơn vị xuất hiện lần lượt kế tiếp nhau trong thời gian.",
+        },
+        {
+          id: 83,
+          type: "medium",
+          q: 'Từ "chân" trong "chân tường" là kết quả của hiện tượng:',
+          arr: [
+            "Ẩn dụ dựa trên sự giống nhau về vị trí.",
+            "Hoán dụ dựa trên quan hệ bộ phận - toàn thể.",
+            "Đồng âm ngẫu nhiên.",
+            "Mượn từ tiếng nước ngoài.",
+          ],
+          ans: "Ẩn dụ dựa trên sự giống nhau về vị trí.",
+        },
+        {
+          id: 84,
+          type: "medium",
+          q: "Hệ thống tín hiệu thứ nhất bao gồm:",
+          arr: [
+            "Các từ ngữ.",
+            "Các ấn tượng, cảm giác trực tiếp từ thế giới khách quan.",
+            "Các khái niệm trừu tượng.",
+            "Các công thức toán học.",
+          ],
+          ans: "Các ấn tượng, cảm giác trực tiếp từ thế giới khách quan.",
+        },
+        {
+          id: 85,
+          type: "medium",
+          q: "Tại sao biệt ngữ giai cấp (như của quý tộc) không được coi là một ngôn ngữ độc lập?",
+          arr: [
+            "Vì chúng không có hệ thống ngữ pháp và vốn từ cơ bản riêng.",
+            "Vì chúng chỉ là những biến thể dựa trên ngôn ngữ chung của dân tộc.",
+            "Vì phạm vi sử dụng quá hẹp.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 86,
+          type: "medium",
+          q: 'Chức năng "phương tiện của tư duy" của ngôn ngữ biểu hiện rõ nhất ở:',
+          arr: [
+            "Ngôn ngữ là hiện thực trực tiếp của tư tưởng.",
+            "Ngôn ngữ tham gia vào quá trình hình thành tư tưởng.",
+            "Không có tư tưởng nào tồn tại ngoài ngôn ngữ.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 87,
+          type: "medium",
+          q: "Theo Ăng-ghen, sự kiện nào là bước quyết định trong quá trình vượn biến thành người?",
+          arr: [
+            "Sự xuất hiện của lửa.",
+            "Đôi tay được giải phóng nhờ dáng đi thẳng đứng.",
+            "Sự bắt chước tiếng chim.",
+            "Sự thay đổi khí hậu.",
+          ],
+          ans: "Đôi tay được giải phóng nhờ dáng đi thẳng đứng.",
+        },
+        {
+          id: 88,
+          type: "medium",
+          q: '"Tính cố định" của ngữ cố định (thành ngữ) được đo bằng:',
+          arr: [
+            "Số lượng từ trong ngữ.",
+            "Khả năng dự đoán sự xuất hiện của các yếu tố còn lại khi biết một yếu tố.",
+            "Độ dài của ngữ khi viết.",
+            "Sự yêu thích của người dùng.",
+          ],
+          ans: "Khả năng dự đoán sự xuất hiện của các yếu tố còn lại khi biết một yếu tố.",
+        },
+        {
+          id: 89,
+          type: "medium",
+          q: "Một từ đa nghĩa và một loạt các từ đồng âm khác nhau ở chỗ:",
+          arr: [
+            "Từ đa nghĩa có các nghĩa liên hệ với nhau; các từ đồng âm có nghĩa tách biệt hoàn toàn.",
+            "Từ đa nghĩa có âm giống nhau; từ đồng âm có âm khác nhau.",
+            "Từ đa nghĩa chỉ có trong tiếng Việt.",
+            "Không có gì khác nhau.",
+          ],
+          ans: "Từ đa nghĩa có các nghĩa liên hệ với nhau; các từ đồng âm có nghĩa tách biệt hoàn toàn.",
+        },
+        {
+          id: 90,
+          type: "medium",
+          q: '"Nghĩa sở dụng" của từ liên quan đến:',
+          arr: [
+            "Thái độ, cảm xúc của người sử dụng đối với từ.",
+            "Cách từ kết hợp với từ khác.",
+            "Khái niệm khoa học của từ.",
+            "Lịch sử của từ.",
+          ],
+          ans: "Thái độ, cảm xúc của người sử dụng đối với từ.",
+        },
+        {
+          id: 91,
+          type: "medium",
+          q: 'Các từ "đỏ, hồng, tía, son" thuộc cùng một:',
+          arr: [
+            "Cặp trái nghĩa.",
+            "Trường nghĩa (chỉ màu sắc).",
+            "Hiện tượng đồng âm.",
+            "Biến thể hình thái.",
+          ],
+          ans: "Trường nghĩa (chỉ màu sắc).",
+        },
+        {
+          id: 92,
+          type: "medium",
+          q: "Tại sao ngôn ngữ là một hệ thống tín hiệu đặc biệt?",
+          arr: [
+            "Vì nó vô cùng phức tạp và có tính đa trị.",
+            "Vì nó có cấu trúc nhiều cấp độ (âm vị, hình vị, từ...).",
+            "Vì nó là phương tiện giao tiếp vạn năng của con người.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 93,
+          type: "medium",
+          q: "Sự phối hợp giữa các ngôn ngữ diễn ra theo cách:",
+          arr: [
+            "Một ngôn ngữ tiêu diệt ngôn ngữ kia ngay lập tức.",
+            "Tạo ra một ngôn ngữ thứ ba hoàn toàn mới.",
+            "Quá trình lâu dài, một ngôn ngữ chiến thắng và giữ lại cốt lõi của mình.",
+            "Không bao giờ xảy ra.",
+          ],
+          ans: "Quá trình lâu dài, một ngôn ngữ chiến thắng và giữ lại cốt lõi của mình.",
+        },
+        {
+          id: 94,
+          type: "medium",
+          q: '"Tính thành ngữ" của một tổ hợp từ nghĩa là:',
+          arr: [
+            "Nghĩa của tổ hợp không bằng tổng số nghĩa của các thành phần cộng lại.",
+            "Tổ hợp đó phải có 4 chữ.",
+            "Tổ hợp đó phải có vần điệu.",
+            "Tổ hợp đó chỉ dùng trong ca dao.",
+          ],
+          ans: "Nghĩa của tổ hợp không bằng tổng số nghĩa của các thành phần cộng lại.",
+        },
+        {
+          id: 95,
+          type: "medium",
+          q: 'Từ "xăng", "lốp", "ghi-đông" trong tiếng Việt là:',
+          arr: [
+            "Từ bản ngữ đồng đại (gốc ngoại lai đã Việt hóa).",
+            "Từ ngoại lai chưa nhập hệ.",
+            "Từ lóng của binh lính.",
+            "Thuật ngữ y học.",
+          ],
+          ans: "Từ bản ngữ đồng đại (gốc ngoại lai đã Việt hóa.",
+        },
+        {
+          id: 96,
+          type: "medium",
+          q: "Từ điển bách khoa khác từ điển ngôn ngữ ở chỗ:",
+          arr: [
+            "Giải thích khái niệm và sự vật thay vì giải thích từ.",
+            "Chỉ sắp xếp theo bảng chữ cái.",
+            "Chỉ có hình ảnh, không có chữ.",
+            "Chỉ dành cho trẻ em.",
+          ],
+          ans: "Giải thích khái niệm và sự vật thay vì giải thích từ.",
+        },
+        {
+          id: 97,
+          type: "medium",
+          q: '"Nguyên nhân bên trong" làm ngôn ngữ biến đổi là:',
+          arr: [
+            "Sự thay đổi chế độ chính trị.",
+            "Mâu thuẫn giữa các yếu tố trong nội bộ hệ thống ngôn ngữ.",
+            "Sự du nhập của văn hóa nước ngoài.",
+            "Sự phát triển của máy tính.",
+          ],
+          ans: "Mâu thuẫn giữa các yếu tố trong nội bộ hệ thống ngôn ngữ.",
+        },
+        {
+          id: 98,
+          type: "medium",
+          q: 'Tại sao "tiếng lóng" và "biệt ngữ" chỉ sống "vất vưởng"?',
+          arr: [
+            "Vì chúng thiếu tính độc lập và không có hệ thống ngữ pháp riêng.",
+            "Vì chúng bị nhà nước cấm.",
+            "Vì chúng quá khó học.",
+            "Vì chúng không có âm thanh.",
+          ],
+          ans: "Vì chúng thiếu tính độc lập và không có hệ thống ngữ pháp riêng.",
+        },
+        {
+          id: 99,
+          type: "medium",
+          q: "Chức năng giao tiếp của cử chỉ bị hạn chế vì:",
+          arr: [
+            "Nghèo nàn, không rõ ràng và phụ thuộc vào khoảng cách nhìn thấy.",
+            "Không thể truyền đạt tư duy trừu tượng phức tạp.",
+            "Phải dùng ngôn ngữ thành tiếng để giải thích cử chỉ.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+        {
+          id: 100,
+          type: "medium",
+          q: '"Tính hệ thống" của ngôn ngữ thể hiện ở:',
+          arr: [
+            "Các đơn vị ngôn ngữ liên hệ và quy định lẫn nhau.",
+            "Ngôn ngữ có quy tắc ngữ pháp chặt chẽ.",
+            "Ngôn ngữ có tính kế thừa lịch sử.",
+            "Tất cả các phương án trên.",
+          ],
+          ans: "Tất cả các phương án trên.",
+        },
+
+        // KHÓ (101 - 150)
+        {
+          id: 101,
+          type: "hard",
+          q: 'Phân tích thí nghiệm của Bôrôpxki về "lời nói bên trong", kết quả thay đổi điện vị ở cơ môi khi suy nghĩ thầm lặng chứng minh điều gì?',
+          arr: [
+            "Tư duy và ngôn ngữ thống nhất với nhau, suy nghĩ luôn gắn với ngữ liệu ngôn ngữ.",
+            "Con người có thể tư duy mà không cần ngôn ngữ.",
+            "Cơ môi hoạt động là do phản xạ tự nhiên không liên quan đến tư duy.",
+            "Tư duy trừu tượng chỉ có ở người nói to.",
+          ],
+          ans: "Tư duy và ngôn ngữ thống nhất với nhau, suy nghĩ luôn gắn với ngữ liệu ngôn ngữ.",
+        },
+        {
+          id: 102,
+          type: "hard",
+          q: 'Tại sao việc coi ngôn ngữ là một "thực thể sống" (sinh vật học) là sai lầm?',
+          arr: [
+            "Vì ngôn ngữ không bị hủy diệt hoàn toàn mà luôn có tính kế thừa và phát triển.",
+            "Vì ngôn ngữ phát triển theo quy luật xã hội, không phải quy luật tự nhiên.",
+            "Vì ngôn ngữ không có quá trình sinh ra, lớn lên, già đi và chết đi theo nghĩa sinh học.",
+            "Tất cả các lý do trên.",
+          ],
+          ans: "Tất cả các lý do trên.",
+        },
+        {
+          id: 103,
+          type: "hard",
+          q: 'Sự khác biệt giữa "khái niệm thông thường" và "khái niệm khoa học" trong nghĩa sở biểu là gì?',
+          arr: [
+            "Khái niệm thông thường dựa trên kinh nghiệm bề ngoài; khái niệm khoa học phản ánh bản chất bên trong.",
+            "Khái niệm thông thường là sai; khái niệm khoa học là đúng.",
+            "Khái niệm thông thường không có từ biểu thị.",
+            "Không có sự khác biệt về mặt ngôn ngữ học.",
+          ],
+          ans: "Khái niệm thông thường dựa trên kinh nghiệm bề ngoài; khái niệm khoa học phản ánh bản chất bên trong.",
+        },
+        {
+          id: 104,
+          type: "hard",
+          q: 'Trong hệ thống tín hiệu ngôn ngữ, "giá trị khu biệt" quan trọng hơn thuộc tính vật chất vì:',
+          arr: [
+            "Cái quan trọng là sự khác biệt giữa các tín hiệu để phân biệt nghĩa, không phải độ đậm nhạt hay to nhỏ của âm/chữ.",
+            "Thuộc tính vật chất không tồn tại trong ngôn ngữ.",
+            "Tín hiệu ngôn ngữ chỉ là tinh thần.",
+            "Mọi người đều nghe giống nhau.",
+          ],
+          ans: "Cái quan trọng là sự khác biệt giữa các tín hiệu để phân biệt nghĩa, không phải độ đậm nhạt hay to nhỏ của âm/chữ.",
+        },
+        {
+          id: 105,
+          type: "hard",
+          q: 'Tại sao một từ đa nghĩa như "đầu" có thể coi là một kết cấu ý nghĩa?',
+          arr: [
+            'Vì các nghĩa của nó liên hệ với nhau qua một "nghĩa tố chung" (như tính chất vị trí hoặc chức năng).',
+            "Vì nó có nhiều âm thanh khác nhau.",
+            "Vì nó là từ mượn tiếng Hán.",
+            "Vì nó chỉ có một nghĩa duy nhất.",
+          ],
+          ans: 'Vì các nghĩa của nó liên hệ với nhau qua một "nghĩa tố chung" (như tính chất vị trí hoặc chức năng).',
+        },
+        {
+          id: 106,
+          type: "hard",
+          q: 'Phân biệt "nghĩa vị" và "nghĩa tố":',
+          arr: [
+            "Nghĩa vị là một ý nghĩa của từ; nghĩa tố là thành phần nhỏ nhất tạo nên nghĩa vị đó.",
+            "Nghĩa vị là âm thanh; nghĩa tố là khái niệm.",
+            "Nghĩa vị có tính dân tộc; nghĩa tố có tính cá nhân.",
+            "Hai khái niệm này là một.",
+          ],
+          ans: "Nghĩa vị là một ý nghĩa của từ; nghĩa tố là thành phần nhỏ nhất tạo nên nghĩa vị đó.",
+        },
+        {
+          id: 107,
+          type: "hard",
+          q: 'Hiện tượng "đồng âm không hoàn toàn" (như trong tiếng Nga) xảy ra khi:',
+          arr: [
+            "Các từ chỉ trùng nhau ở một số hình thái ngữ pháp nhất định.",
+            "Các từ có âm gần giống nhau.",
+            "Các từ có nghĩa gần giống nhau.",
+            "Các từ chỉ dùng ở địa phương.",
+          ],
+          ans: "Các từ chỉ trùng nhau ở một số hình thái ngữ pháp nhất định.",
+        },
+        {
+          id: 108,
+          type: "hard",
+          q: 'Tại sao nói "ngôn ngữ văn hóa dân tộc" là ngôn ngữ đã được "gọt giũa"?',
+          arr: [
+            "Vì nó loại bỏ các biến thể địa phương và xã hội để đạt đến chuẩn mực chung.",
+            "Vì nó chỉ dành cho giới thượng lưu.",
+            "Vì nó được viết bằng chữ vàng.",
+            "Vì nó không bao giờ thay đổi.",
+          ],
+          ans: "Vì nó loại bỏ các biến thể địa phương và xã hội để đạt đến chuẩn mực chung.",
+        },
+        {
+          id: 109,
+          type: "hard",
+          q: 'Mác và Ăng-ghen cho rằng ngôn ngữ nảy sinh do "nhu cầu phải giao dịch với người khác". Điều này bác bỏ quan điểm nào?',
+          arr: [
+            "Ngôn ngữ là hiện thực cá nhân hoặc hiện tượng tự nhiên.",
+            "Ngôn ngữ là công cụ đấu tranh giai cấp.",
+            "Ngôn ngữ là hệ thống tín hiệu thứ hai.",
+            "Ngôn ngữ có tính dân tộc.",
+          ],
+          ans: "Ngôn ngữ là hiện thực cá nhân hoặc hiện tượng tự nhiên.",
+        },
+        {
+          id: 110,
+          type: "hard",
+          q: '"Tính hai mặt" của tín hiệu ngôn ngữ (Saussure) bao gồm:',
+          arr: [
+            "Cái biểu hiện (hình thức ngữ âm) và cái được biểu hiện (khái niệm).",
+            "Âm thanh và chữ viết.",
+            "Từ và câu.",
+            "Nghĩa đen và nghĩa bóng.",
+          ],
+          ans: "Cái biểu hiện (hình thức ngữ âm) và cái được biểu hiện (khái niệm).",
+        },
+        {
+          id: 111,
+          type: "hard",
+          q: '"Phương pháp phân tích nghĩa tố" có lợi ích gì trong từ điển học?',
+          arr: [
+            "Giúp miêu tả chính xác kết cấu nghĩa và xác định mối liên hệ giữa các từ.",
+            "Giúp đếm số lượng từ nhanh hơn.",
+            "Giúp thay thế hoàn toàn việc định nghĩa bằng lời.",
+            "Giúp học ngoại ngữ mà không cần tra từ điển.",
+          ],
+          ans: "Giúp miêu tả chính xác kết cấu nghĩa và xác định mối liên hệ giữa các từ.",
+        },
+        {
+          id: 112,
+          type: "hard",
+          q: 'Tại sao thuật ngữ khoa học thường mang "tính quốc tế"?',
+          arr: [
+            "Vì các khái niệm khoa học là tài sản chung của nhân loại, không bị giới hạn bởi dân tộc.",
+            "Vì các nhà khoa học chỉ dùng tiếng Anh.",
+            "Vì khoa học không có tính lịch sử.",
+            "Vì thuật ngữ luôn bắt nguồn từ tiếng Latin.",
+          ],
+          ans: "Vì các khái niệm khoa học là tài sản chung của nhân loại, không bị giới hạn bởi dân tộc.",
+        },
+        {
+          id: 113,
+          type: "hard",
+          q: 'Sự khác biệt giữa "nghĩa tự do" và "nghĩa hạn chế" là:',
+          arr: [
+            "Nghĩa tự do dựa trên logic thực tế; nghĩa hạn chế dựa trên quy luật kết hợp nội tại của ngôn ngữ.",
+            "Nghĩa tự do ai cũng dùng; nghĩa hạn chế chỉ bác sĩ dùng.",
+            "Nghĩa tự do không có trong từ điển.",
+            "Nghĩa hạn chế luôn là nghĩa bóng.",
+          ],
+          ans: "Nghĩa tự do dựa trên logic thực tế; nghĩa hạn chế dựa trên quy luật kết hợp nội tại của ngôn ngữ.",
+        },
+        {
+          id: 114,
+          type: "hard",
+          q: 'Trong các từ "mở cửa", "mở vở", "mở màn", từ "mở" thể hiện:',
+          arr: [
+            "Tính cân xứng trong quan hệ trái nghĩa (mở - đóng, mở - gấp, mở - hạ).",
+            "Hiện tượng đồng âm hoàn toàn.",
+            "Sự biến đổi nghĩa theo hướng thu hẹp.",
+            "Chỉ là một nghĩa duy nhất.",
+          ],
+          ans: "Tính cân xứng trong quan hệ trái nghĩa (mở - đóng, mở - gấp, mở - hạ).",
+        },
+        {
+          id: 115,
+          type: "hard",
+          q: 'Tại sao "từ vựng cơ bản" (vốn từ gốc) lại có sức kiên định lớn?',
+          arr: [
+            "Vì nó biểu thị những khái niệm thiết yếu nhất và làm nền tảng để cấu tạo từ mới.",
+            "Vì nhà nước quy định không được thay đổi nó.",
+            "Vì nó không có âm thanh.",
+            "Vì nó chỉ gồm các từ đơn âm tiết.",
+          ],
+          ans: "Vì nó biểu thị những khái niệm thiết yếu nhất và làm nền tảng để cấu tạo từ mới.",
+        },
+        {
+          id: 116,
+          type: "hard",
+          q: '"Nghĩa kết cấu" của từ bao gồm hai trục nào?',
+          arr: [
+            "Trục đối vị (nghĩa khu biệt) và trục ngữ đoạn (ngữ trị).",
+            "Trục thời gian và trục không gian.",
+            "Trục âm thanh và trục chữ viết.",
+            "Trục chủ quan và trục khách quan.",
+          ],
+          ans: "Trục đối vị (nghĩa khu biệt) và trục ngữ đoạn (ngữ trị).",
+        },
+        {
+          id: 117,
+          type: "hard",
+          q: 'Hiện tượng "từ nguyên học dân gian" là gì?',
+          arr: [
+            "Giải thích nguồn gốc từ dựa trên sự giống nhau ngẫu nhiên về âm mà không theo quy luật khoa học.",
+            "Giải thích từ dựa trên ca dao tục ngữ.",
+            "Giải thích từ theo đúng lịch sử biến đổi âm hữu thanh - vô thanh.",
+            "Giải thích từ mượn bằng tiếng nước ngoài.",
+          ],
+          ans: "Giải thích nguồn gốc từ dựa trên sự giống nhau ngẫu nhiên về âm mà không theo quy luật khoa học.",
+        },
+        {
+          id: 118,
+          type: "hard",
+          q: '"Sự phối hợp ngôn ngữ" (theo Stalin) không tạo ra một ngôn ngữ thứ ba mới hoàn toàn vì:',
+          arr: [
+            "Một ngôn ngữ thường giữ vững hệ thống ngữ pháp và vốn từ cơ bản, chỉ vay mượn thêm từ vựng.",
+            "Vì con người không muốn học ngôn ngữ mới.",
+            "Vì các ngôn ngữ luôn đẩy lùi nhau.",
+            "Vì ngữ pháp không bao giờ thay đổi.",
+          ],
+          ans: "Một ngôn ngữ thường giữ vững hệ thống ngữ pháp và vốn từ cơ bản, chỉ vay mượn thêm từ vựng.",
+        },
+        {
+          id: 119,
+          type: "hard",
+          q: '"Tính đa cấp độ" của ngôn ngữ có nghĩa là:',
+          arr: [
+            "Các đơn vị bậc thấp nằm trong đơn vị bậc cao (âm vị < hình vị < từ < câu).",
+            "Ngôn ngữ có cấp độ cho người giàu và người nghèo.",
+            "Ngôn ngữ có cấp độ dễ và khó.",
+            "Ngôn ngữ có cấp độ cổ và hiện đại.",
+          ],
+          ans: "Các đơn vị bậc thấp nằm trong đơn vị bậc cao (âm vị < hình vị < từ < câu).",
+        },
+        {
+          id: 120,
+          type: "hard",
+          q: 'Tại sao nói "ngôn ngữ là hiện thực trực tiếp của tư tưởng"?',
+          arr: [
+            "Vì không có ý nghĩ nào tồn tại mà không thông qua vỏ vật chất là ngôn ngữ.",
+            "Vì ngôn ngữ và tư tưởng là một thực thể duy nhất.",
+            "Vì ngôn ngữ có trước tư tưởng.",
+            "Vì tư tưởng chỉ xuất hiện khi chúng ta nói to.",
+          ],
+          ans: "Vì không có ý nghĩ nào tồn tại mà không thông qua vỏ vật chất là ngôn ngữ.",
+        },
+        {
+          id: 121,
+          type: "hard",
+          q: '"Trường nghĩa" theo quan niệm của J. Trier bị phê phán là duy tâm vì:',
+          arr: [
+            "Coi hệ thống khái niệm nằm ngoài sự phản ánh thực tế khách quan.",
+            "Coi ngôn ngữ là công cụ sản xuất.",
+            "Coi từ vựng biến đổi quá nhanh.",
+            "Coi ngôn ngữ không có tính hệ thống.",
+          ],
+          ans: "Coi hệ thống khái niệm nằm ngoài sự phản ánh thực tế khách quan.",
+        },
+        {
+          id: 122,
+          type: "hard",
+          q: 'Sự biến đổi nghĩa từ "operation" (hoạt động chung) sang "giải phẫu" (y tế) là hiện tượng:',
+          arr: [
+            "Chuyên môn hóa (thu hẹp ý nghĩa).",
+            "Khái quát hóa (mở rộng ý nghĩa).",
+            "Ẩn dụ hình thức.",
+            "Hoán dụ địa điểm.",
+          ],
+          ans: "Chuyên môn hóa (thu hẹp ý nghĩa).",
+        },
+        {
+          id: 123,
+          type: "hard",
+          q: "Tại sao người mù-câm-điếc bẩm sinh khó có tư duy trừu tượng như người bình thường?",
+          arr: [
+            "Vì họ thiếu hụt hệ thống tín hiệu từ (ngôn ngữ thành tiếng) làm điểm tựa cho tư duy.",
+            "Vì họ không có não bộ hoàn chỉnh.",
+            "Vì họ không muốn giao tiếp.",
+            "Vì họ không có cảm giác xúc giác.",
+          ],
+          ans: "Vì họ thiếu hụt hệ thống tín hiệu từ (ngôn ngữ thành tiếng) làm điểm tựa cho tư duy.",
+        },
+        {
+          id: 124,
+          type: "hard",
+          q: 'Một "từ điển biểu ý" (Thesaurus) giúp ích gì cho "người phát" (người nói/viết)?',
+          arr: [
+            "Giúp lựa chọn từ phù hợp từ một khái niệm/ý tưởng có sẵn.",
+            "Giúp tra cách phát âm của từ.",
+            "Giúp tìm nguồn gốc của từ.",
+            "Giúp đếm số lượng từ trong văn bản.",
+          ],
+          ans: "Giúp lựa chọn từ phù hợp từ một khái niệm/ý tưởng có sẵn.",
+        },
+        {
+          id: 125,
+          type: "hard",
+          q: '"Nghĩa hình thái bên trong" của từ "hướng dương" (hoa quay về mặt trời) là:',
+          arr: [
+            "Cách gọi tên dựa trên đặc điểm duyên cớ của sự vật.",
+            "Tên gọi ngẫu nhiên không có lý do.",
+            "Tên gọi dựa trên màu sắc.",
+            "Tên gọi mượn từ tiếng Pháp.",
+          ],
+          ans: "Cách gọi tên dựa trên đặc điểm duyên cớ của sự vật.",
+        },
+        {
+          id: 126,
+          type: "hard",
+          q: 'Tại sao sự phân biệt "từ đa nghĩa" và "từ đồng âm" đôi khi rất khó khăn?',
+          arr: [
+            "Vì mối liên hệ ngữ nghĩa có thể bị mờ nhạt dần qua thời gian (phân hóa nghĩa).",
+            "Vì âm thanh của chúng hoàn toàn giống nhau.",
+            "Vì từ điển không ghi chép rõ ràng.",
+            "Cả A và B.",
+          ],
+          ans: "Cả A và B.",
+        },
+        {
+          id: 127,
+          type: "hard",
+          q: 'Một âm tố được gọi là "hữu thanh" khi:',
+          arr: [
+            "Dây thanh chấn động tạo ra thanh.",
+            "Luồng hơi đi ra mạnh.",
+            "Khoang miệng mở rộng.",
+            "Lưỡi con hạ xuống.",
+          ],
+          ans: "Dây thanh chấn động tạo ra thanh.",
+        },
+        {
+          id: 128,
+          type: "hard",
+          q: '"Hệ thống tín hiệu thứ hai" gắn liền với khả năng nào duy nhất ở con người?',
+          arr: [
+            "Khả năng tạo ra các khái niệm chung và tư duy trừu tượng.",
+            "Khả năng nghe âm thanh.",
+            "Khả năng bộc lộ cảm xúc giận dữ.",
+            "Khả năng bắt chước tiếng kêu.",
+          ],
+          ans: "Khả năng tạo ra các khái niệm chung và tư duy trừu tượng.",
+        },
+        {
+          id: 129,
+          type: "hard",
+          q: "Tại sao tiếng Việt không dùng biến tố nhưng vẫn biểu đạt được quan hệ ngữ pháp?",
+          arr: [
+            "Nhờ sử dụng trật tự từ và hư từ.",
+            "Nhờ thay đổi âm đuôi của từ.",
+            "Nhờ dùng trọng âm.",
+            "Tiếng Việt không có quan hệ ngữ pháp.",
+          ],
+          ans: "Nhờ sử dụng trật tự từ và hư từ.",
+        },
+        {
+          id: 130,
+          type: "hard",
+          q: '"Cấp độ" trong ngôn ngữ được xác định dựa trên quan hệ:',
+          arr: [
+            "Quan hệ tôn ti (nằm trong và bao gồm).",
+            "Quan hệ bằng vai.",
+            "Quan hệ lịch sử.",
+            "Quan hệ chữ viết.",
+          ],
+          ans: "Quan hệ tôn ti (nằm trong và bao gồm).",
+        },
+        {
+          id: 131,
+          type: "hard",
+          q: '"Sao phỏng ngữ nghĩa" khác với "mượn từ phiên âm" ở chỗ:',
+          arr: [
+            "Chỉ mượn nghĩa bóng/cấu trúc nghĩa mà không mượn vỏ âm thanh.",
+            "Mượn cả âm và nghĩa.",
+            "Chỉ mượn âm, không mượn nghĩa.",
+            "Chỉ dùng trong dịch thuật văn học.",
+          ],
+          ans: "Chỉ mượn nghĩa bóng/cấu trúc nghĩa mà không mượn vỏ âm thanh.",
+        },
+        {
+          id: 132,
+          type: "hard",
+          q: '"Ngôn ngữ là ý thức thực tại, thực tiễn" (Marx) nhấn mạnh bản chất nào?',
+          arr: [
+            "Bản chất xã hội và sự thống nhất với tư duy.",
+            "Bản chất sinh học.",
+            "Bản chất cá nhân.",
+            "Bản chất tự nhiên.",
+          ],
+          ans: "Bản chất xã hội và sự thống nhất với tư duy.",
+        },
+        {
+          id: 133,
+          type: "hard",
+          q: 'Một đơn vị ngôn ngữ có thể coi là "hình vị" khi nó:',
+          arr: [
+            "Là đơn vị nhỏ nhất có nghĩa.",
+            "Là đơn vị nhỏ nhất có âm thanh.",
+            "Là một câu hoàn chỉnh.",
+            "Là một đoạn văn.",
+          ],
+          ans: "Là đơn vị nhỏ nhất có nghĩa.",
+        },
+        {
+          id: 134,
+          type: "hard",
+          q: 'Quan hệ "đối vị" (trục dọc) trong ngôn ngữ cho phép:',
+          arr: [
+            "Thay thế các đơn vị cùng loại vào một vị trí trong chuỗi lời nói.",
+            "Kết hợp các từ thành câu theo chiều ngang.",
+            "Tạo ra âm thanh mới.",
+            "Thay đổi nghĩa của câu hoàn toàn.",
+          ],
+          ans: "Thay thế các đơn vị cùng loại vào một vị trí trong chuỗi lời nói.",
+        },
+        {
+          id: 135,
+          type: "hard",
+          q: "Tại sao việc chuẩn hóa thuật ngữ là cần thiết cho sự phát triển khoa học?",
+          arr: [
+            "Để tạo ra sự thống nhất trong nhận thức và trao đổi thông tin quốc tế.",
+            "Để làm cho ngôn ngữ khó hiểu hơn.",
+            "Để loại bỏ tiếng mẹ đẻ.",
+            "Để bảo vệ quyền lợi của các nhà ngôn ngữ học.",
+          ],
+          ans: "Để tạo ra sự thống nhất trong nhận thức và trao đổi thông tin quốc tế.",
+        },
+        {
+          id: 136,
+          type: "hard",
+          q: 'Bản chất của hiện tượng "chuyển loại" (như cái bào -> bào gỗ) là:',
+          arr: [
+            "Tạo ra biến thể từ vựng - ngữ nghĩa mới trong cùng một từ vị (hoặc tách thành từ mới nếu độc lập cao).",
+            "Hiện tượng đồng âm ngẫu nhiên.",
+            "Hiện tượng mượn từ nước ngoài.",
+            "Hiện tượng lỗi thời của từ.",
+          ],
+          ans: "Tạo ra biến thể từ vựng - ngữ nghĩa mới trong cùng một từ vị (hoặc tách thành từ mới nếu độc lập cao).",
+        },
+        {
+          id: 137,
+          type: "hard",
+          q: '"Tính hệ thống" của thuật ngữ khoa học thể hiện rõ nhất ở:',
+          arr: [
+            "Sự lệ thuộc lẫn nhau của các khái niệm trong một ngành (như âm vị, hình vị, từ vị).",
+            "Việc dùng chung một bộ chữ cái.",
+            "Việc các từ đều có độ dài bằng nhau.",
+            "Việc thuật ngữ chỉ dùng trong sách.",
+          ],
+          ans: "Sự lệ thuộc lẫn nhau của các khái niệm trong một ngành (như âm vị, hình vị, từ vị).",
+        },
+        {
+          id: 138,
+          type: "hard",
+          q: '"Nghĩa từ nguyên" là:',
+          arr: [
+            "Nghĩa gốc cổ nhất của từ.",
+            "Nghĩa mới nhất của từ.",
+            "Nghĩa bóng của từ.",
+            "Nghĩa của từ trong tiếng Anh.",
+          ],
+          ans: "Nghĩa gốc cổ nhất của từ.",
+        },
+        {
+          id: 139,
+          type: "hard",
+          q: "Tại sao ngôn ngữ dân tộc Việt Nam lại chọn tiếng Hà Nội (Kinh) làm cơ sở?",
+          arr: [
+            "Do sự tập trung kinh tế, chính trị và văn hóa lịch sử tại đây.",
+            "Do nhà nước ra lệnh bắt buộc.",
+            "Do tiếng Hà Nội dễ nghe nhất.",
+            "Do tiếng Hà Nội không có dấu.",
+          ],
+          ans: "Do sự tập trung kinh tế, chính trị và văn hóa lịch sử tại đây.",
+        },
+        {
+          id: 140,
+          type: "hard",
+          q: 'Sự biến đổi từ "mùi" (khứu giác) sang "mùi" (hôi) là kết quả của:',
+          arr: [
+            "Thu hẹp ý nghĩa.",
+            "Mở rộng ý nghĩa.",
+            "Ẩn dụ màu sắc.",
+            "Hoán dụ tác giả.",
+          ],
+          ans: "Thu hẹp ý nghĩa.",
+        },
+        {
+          id: 141,
+          type: "hard",
+          q: 'Đặc điểm "trung hòa về biểu cảm" của thuật ngữ nghĩa là:',
+          arr: [
+            "Nó không mang sắc thái tình cảm, thái độ trong hệ thống chuyên môn.",
+            "Nó không có nghĩa.",
+            "Nó chỉ dùng để khen ngợi.",
+            "Nó luôn gây cảm giác buồn chán.",
+          ],
+          ans: "Nó không mang sắc thái tình cảm, thái độ trong hệ thống chuyên môn.",
+        },
+        {
+          id: 142,
+          type: "hard",
+          q: '"Ngôn ngữ văn hóa" khác với "ngôn ngữ nói toàn dân" ở điểm nào?',
+          arr: [
+            "Tính chuẩn mực và sự thống nhất hết sức to lớn trong kết cấu.",
+            "Chỉ dùng cho người giàu.",
+            "Chỉ có ở dạng viết.",
+            "Không bao giờ thay đổi từ vựng.",
+          ],
+          ans: "Tính chuẩn mực và sự thống nhất hết sức to lớn trong kết cấu.",
+        },
+        {
+          id: 143,
+          type: "hard",
+          q: 'Hiện tượng "trung tâm bành trướng ngữ nghĩa" (như từ ghê -> đẹp ghê, sợ ghê) cho thấy:',
+          arr: [
+            "Yếu tố tâm lý xã hội ảnh hưởng mạnh đến sự chuyển nghĩa của từ.",
+            "Ngôn ngữ đang bị suy thoái.",
+            "Người nói không biết dùng từ khác.",
+            "Từ vựng tiếng Việt quá nghèo nàn.",
+          ],
+          ans: "Yếu tố tâm lý xã hội ảnh hưởng mạnh đến sự chuyển nghĩa của từ.",
+        },
+        {
+          id: 144,
+          type: "hard",
+          q: 'Tại sao nói ngôn ngữ không phải là "công cụ sản xuất"?',
+          arr: [
+            "Vì ngôn ngữ không trực tiếp tạo ra của cải vật chất mà chỉ tạo ra lời nói.",
+            "Vì ngôn ngữ không có hình dáng.",
+            "Vì ngôn ngữ ai cũng dùng được.",
+            "Vì ngôn ngữ thuộc kiến trúc thượng tầng.",
+          ],
+          ans: "Vì ngôn ngữ không trực tiếp tạo ra của cải vật chất mà chỉ tạo ra lời nói.",
+        },
+        {
+          id: 145,
+          type: "hard",
+          q: '"Tính võ đoán" của ngôn ngữ có ngoại lệ không?',
+          arr: [
+            "Có, trong các từ tượng thanh và từ cảm thán (có mối liên hệ nhất định giữa âm và nghĩa).",
+            "Không, hoàn toàn là ngẫu nhiên 100%.",
+            "Có, trong tất cả các danh từ riêng.",
+            "Có, trong các thuật ngữ toán học.",
+          ],
+          ans: "Có, trong các từ tượng thanh và từ cảm thán (có mối liên hệ nhất định giữa âm và nghĩa).",
+        },
+        {
+          id: 146,
+          type: "hard",
+          q: 'Sự khác biệt giữa "ngôn ngữ" (langue) và "lời nói" (parole) là:',
+          arr: [
+            "Ngôn ngữ là hệ thống tiềm tàng chung; lời nói là hành vi sử dụng cụ thể của cá nhân.",
+            "Ngôn ngữ là viết; lời nói là nói.",
+            "Ngôn ngữ có nghĩa; lời nói không có nghĩa.",
+            "Ngôn ngữ của người lớn; lời nói của trẻ con.",
+          ],
+          ans: "Ngôn ngữ là hệ thống tiềm tàng chung; lời nói là hành vi sử dụng cụ thể của cá nhân.",
+        },
+        {
+          id: 147,
+          type: "hard",
+          q: 'Tại sao Ăng-ghen nói "ngôn ngữ bắt nguồn từ trong lao động và cùng nảy sinh với lao động" là cách giải thích duy nhất đúng?',
+          arr: [
+            "Vì lao động tạo ra cả con người, tư duy và nhu cầu giao tiếp xã hội.",
+            "Vì lao động là hoạt động duy nhất của con người.",
+            "Vì lao động giúp con người bắt chước tiếng thú vật tốt hơn.",
+            "Vì lao động làm con người mệt nên phải nói.",
+          ],
+          ans: "Vì lao động tạo ra cả con người, tư duy và nhu cầu giao tiếp xã hội.",
+        },
+        {
+          id: 148,
+          type: "hard",
+          q: 'Hiện tượng "đồng âm" có thể gây ra trở ngại gì trong giao tiếp?',
+          arr: [
+            "Gây hiểu lầm nếu ngữ cảnh không rõ ràng.",
+            "Làm cho ngôn ngữ trở nên quá phức tạp.",
+            "Làm cho người nghe bị điếc.",
+            "Không gây ra trở ngại gì.",
+          ],
+          ans: "Gây hiểu lầm nếu ngữ cảnh không rõ ràng.",
+        },
+        {
+          id: 149,
+          type: "hard",
+          q: '"Nghĩa biểu thái" (sắc thái tình cảm) của từ được xếp vào thành phần nghĩa nào?',
+          arr: [
+            "Nghĩa sở dụng.",
+            "Nghĩa sở chỉ.",
+            "Nghĩa kết cấu.",
+            "Nghĩa vị.",
+          ],
+          ans: "Nghĩa sở dụng.",
+        },
+        {
+          id: 150,
+          type: "hard",
+          q: 'Tại sao nói "ngôn ngữ là một hệ thống tín hiệu"?',
+          arr: [
+            "Vì nó là tập hợp các đơn vị (yếu tố) có quan hệ hữu cơ với nhau để mang thông tin.",
+            "Vì nó có âm thanh.",
+            "Vì nó được dạy trong trường học.",
+            "Vì nó có thể viết ra giấy.",
+          ],
+          ans: "Vì nó là tập hợp các đơn vị (yếu tố) có quan hệ hữu cơ với nhau để mang thông tin.",
+        },
+      ];
+
+      let currentQuestions = [];
+      let currentIndex = 0;
+      let score = 0;
+      let isAnswered = false;
+      let currentModeSelected = ""; // Lưu tên chế độ chơi hiện tại
+
+      // Khi trang web tải xong, load luôn lịch sử làm bài cũ
+      window.onload = function () {
+        renderHistory();
+      };
+
+      // Thuật toán xáo trộn mảng ngẫu nhiên (Fisher-Yates)
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      // Bắt đầu làm bài
+      function startQuiz(mode) {
+        currentModeSelected = mode;
+        if (mode === "all") {
+          currentQuestions = [...rawQuestions];
+          document.getElementById("quiz-mode-title").innerText =
+            "Chế độ: Tất cả các câu";
+        } else {
+          currentQuestions = rawQuestions.filter((q) => q.type === mode);
+          let modeText =
+            mode === "easy" ? "Dễ" : mode === "medium" ? "Trung bình" : "Khó";
+          document.getElementById("quiz-mode-title").innerText =
+            `Chế độ: Mức độ ${modeText}`;
+        }
+
+        shuffle(currentQuestions);
+
+        currentIndex = 0;
+        score = 0;
+        isAnswered = false;
+
+        document.getElementById("menu-container").classList.add("hidden");
+        document.getElementById("result-box").classList.add("hidden");
+        document.getElementById("quiz-box").classList.remove("hidden");
+
+        showQuestion();
+      }
+
+      // Hiển thị câu hỏi
+      function showQuestion() {
+        isAnswered = false;
+        document.getElementById("next-btn").classList.add("hidden");
+
+        document.getElementById("question-progress").innerText =
+          `Câu hỏi: ${currentIndex + 1}/${currentQuestions.length}`;
+
+        const currentQ = currentQuestions[currentIndex];
+        document.getElementById("question-text").innerText =
+          `Câu ${currentIndex + 1}: ${currentQ.q}`;
+
+        let options = [...currentQ.arr];
+        shuffle(options);
+
+        const optionsList = document.getElementById("options-list");
+        optionsList.innerHTML = "";
+
+        options.forEach((opt) => {
+          const button = document.createElement("button");
+          button.className = "option";
+          button.innerText = opt;
+          button.onclick = () => selectOption(button, opt, currentQ.ans);
+          optionsList.appendChild(button);
+        });
+      }
+
+      // Chọn đáp án
+      function selectOption(selectedBtn, selectedOpt, correctAns) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const allButtons = document.querySelectorAll(".option");
+
+        if (selectedOpt === correctAns) {
+          selectedBtn.classList.add("correct");
+          score++;
+        } else {
+          selectedBtn.classList.add("wrong");
+          allButtons.forEach((btn) => {
+            if (btn.innerText === correctAns) {
+              btn.classList.add("correct");
+            }
+          });
+        }
+
+        allButtons.forEach((btn) => (btn.disabled = true));
+
+        const nextBtn = document.getElementById("next-btn");
+        if (currentIndex === currentQuestions.length - 1) {
+          nextBtn.innerText = "Xem Kết Quả";
+        } else {
+          nextBtn.innerText = "Câu Tiếp Theo ➔";
+        }
+        nextBtn.classList.remove("hidden");
+      }
+
+      // Câu tiếp theo
+      function nextQuestion() {
+        if (currentIndex < currentQuestions.length - 1) {
+          currentIndex++;
+          showQuestion();
+        } else {
+          showResult();
+        }
+      }
+
+      // Hiển thị kết quả và lưu vào Lịch sử
+      function showResult() {
+        document.getElementById("quiz-box").classList.add("hidden");
+        document.getElementById("result-box").classList.remove("hidden");
+
+        let percentage = Math.round((score / currentQuestions.length) * 100);
+        document.getElementById("score-circle").innerHTML =
+          `${percentage}% <span id="score-text">${score}/${currentQuestions.length} câu</span>`;
+
+        let remark = "";
+        if (percentage >= 90)
+          remark =
+            "🏆 Tuyệt vời! Bạn đã nắm chắc kiến thức Dẫn luận Ngôn ngữ học rồi đấy!";
+        else if (percentage >= 75)
+          remark =
+            "🌟 Rất tốt! Điểm số này đủ giúp bạn tự tin vượt qua kỳ thi.";
+        else if (percentage >= 50)
+          remark =
+            "👍 Khá tốt, bạn đạt mức trung bình khá. Ôn tập thêm chút nữa nhé.";
+        else
+          remark =
+            "📚 Điểm số hơi thấp rồi. Hãy đọc lại giáo trình và thử sức lại nhé!";
+
+        document.getElementById("remark").innerText = remark;
+
+        // TIẾN HÀNH LƯU KẾT QUẢ VÀO LOCALSTORAGE
+        saveHistory(
+          currentModeSelected,
+          score,
+          currentQuestions.length,
+          percentage,
+        );
+      }
+
+      // Hàm lưu lịch sử dữ liệu
+      function saveHistory(mode, score, total, percentage) {
+        let history = JSON.parse(localStorage.getItem("quiz_history")) || [];
+
+        // Tạo chuỗi thời gian hiện tại (Định dạng: DD/MM/YYYY - HH:MM)
+        let now = new Date();
+        let timeStr = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()} - ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+
+        let newRecord = {
+          time: timeStr,
+          mode: mode,
+          scoreText: `${score}/${total}`,
+          ratio: `${percentage}%`,
+          pass: percentage >= 50 ? "Đạt" : "Chưa đạt",
+        };
+
+        history.unshift(newRecord); // Đưa bản ghi mới nhất lên đầu bảng
+        localStorage.setItem("quiz_history", JSON.stringify(history));
+        renderHistory(); // Cập nhật lại bảng hiển thị
+      }
+
+      // Hàm đọc dữ liệu lịch sử ra bảng giao diện
+      function renderHistory() {
+        let history = JSON.parse(localStorage.getItem("quiz_history")) || [];
+        const tbody = document.getElementById("history-tbody");
+        tbody.innerHTML = "";
+
+        if (history.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-light);">Bạn chưa thực hiện bài trắc nghiệm nào.</td></tr>`;
+          document.getElementById("clear-history-btn").classList.add("hidden");
+          return;
+        }
+
+        document.getElementById("clear-history-btn").classList.remove("hidden");
+
+        history.forEach((item) => {
+          let modeBadge = "";
+          if (item.mode === "easy")
+            modeBadge = `<span class="badge badge-easy">Dễ</span>`;
+          else if (item.mode === "medium")
+            modeBadge = `<span class="badge badge-medium">Trung bình</span>`;
+          else if (item.mode === "hard")
+            modeBadge = `<span class="badge badge-hard">Khó</span>`;
+          else modeBadge = `<span class="badge badge-all">Tất cả</span>`;
+
+          let passColor =
+            item.pass === "Đạt"
+              ? "color: var(--success); font-weight:600;"
+              : "color: var(--danger); font-weight:600;";
+
+          let row = `<tr>
+                <td>${item.time}</td>
+                <td>${modeBadge}</td>
+                <td>${item.scoreText}</td>
+                <td style="font-weight: 600;">${item.ratio}</td>
+                <td style="${passColor}">${item.pass}</td>
+            </tr>`;
+          tbody.innerHTML += row;
+        });
+      }
+
+      // Xóa toàn bộ lịch sử
+      function clearHistory() {
+        if (
+          confirm("Bạn có chắc chắn muốn xóa toàn bộ lịch sử làm bài không?")
+        ) {
+          localStorage.removeItem("quiz_history");
+          renderHistory();
+        }
+      }
+
+      function backToMenu() {
+        document.getElementById("result-box").classList.add("hidden");
+        document.getElementById("menu-container").classList.remove("hidden");
+      }
+
+      function confirmExit() {
+        if (
+          confirm(
+            "Bạn có chắc chắn muốn thoát bài trắc nghiệm này không? Mọi kết quả hiện tại sẽ bị hủy.",
+          )
+        ) {
+          backToMenu();
+        }
+      }
+    </script>
+  </body>
+</html>
